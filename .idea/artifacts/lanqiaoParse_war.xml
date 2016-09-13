@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lanqiaoParse:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="lanqiaoParse.war">
+      <element id="artifact" artifact-name="lanqiaoParse:war exploded" />
+    </root>
+  </artifact>
+</component>
