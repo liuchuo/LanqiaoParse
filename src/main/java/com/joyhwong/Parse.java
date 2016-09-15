@@ -21,29 +21,39 @@ import java.util.TreeMap;
  */
 public class Parse {
     public static void main(String[] args) {
+        // 创建一个map按照学校的名字来存储学校各个奖项的记录
         SortedMap<String, Reward> rewards = new TreeMap<String, Reward>();
-        File excelFile = new File("/Users/hdvsyu/Documents/lanqiaoParse/src/main/resources/2016年软件类-江苏赛区获奖名单.xlsx");
+
+        // 获取需要进行分析的源文件
+        File excelFile = new File("2016年软件类-江苏赛区获奖名单.xlsx");
         try {
+            // 创建一个工作薄表单对象
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));
+            // 获取工作薄中得第一张工作表
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
+            // 从工作表中获取工作表的行指针
             Iterator<Row> rows = xssfSheet.rowIterator();
+            // 跳过文件的前三行无用信息
             rows.next();rows.next();rows.next();
             while (rows.hasNext()) {
+                // 获取工作表中得一行
                 XSSFRow row = (XSSFRow) rows.next();
+                // 获取行迭代器
                 Iterator<Cell> cells = row.cellIterator();
-                cells.next();
-                XSSFCell cell = (XSSFCell) cells.next();
+                cells.next(); // 跳过第一个格子(江苏)
+                XSSFCell cell = (XSSFCell) cells.next(); // 获取格子的内容
                 if (rewards.get(cell.getStringCellValue()) == null) {
                     rewards.put(cell.getStringCellValue(), new Reward());
                 }
 
-                String school = cell.getStringCellValue();
+                String school = cell.getStringCellValue(); // 获取学校名
 
-                cells.next();cells.next();
+                cells.next();cells.next(); // 跳过准考证号和姓名
 
-                String subject = cells.next().getStringCellValue();
-                String score = cells.next().getStringCellValue();
+                String subject = cells.next().getStringCellValue(); // 获取科目值
+                String score = cells.next().getStringCellValue(); // 获取奖项
 
+                // 按照各组各奖项分别放到对应的数组中
                 Reward reward = rewards.get(school);
 
                 if (subject.equals("C/C++程序设计大学 A 组省赛")) {
@@ -81,6 +91,8 @@ public class Parse {
                 }
                 rewards.put(school, reward);
             }
+
+            // 将所有的数据处理完后,将表格打印出来
             printTable(rewards);
         } catch (IOException e) {
             e.printStackTrace();
