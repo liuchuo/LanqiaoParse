@@ -2,3 +2,8 @@
 *.iml 
 .idea/
 
+lanqiaoParse.iml
+
+.DS_Store
+
+.idea/artifacts/lanqiaoParse_war_exploded.xml
