@@ -10,6 +10,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -250,7 +252,8 @@ public class Parse {
             xssfSheet.autoSizeColumn(i);
         }
 
-        File file = new File("result.xlsx");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        File file = new File("lanqiao" + simpleDateFormat.format(new Date()) + ".xlsx");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             xssfWorkBook.write(fileOutputStream);
