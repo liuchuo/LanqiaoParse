@@ -2,9 +2,20 @@
 
 ![](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg) [![](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/JoyHwong/lanqiaoParse/blob/master/LICENSE)
 
-### Sample
+### Get Started
 
-将蓝桥杯发的电子版放到项目根目录下，用Intellij idea导入Maven项目，编译，运行，在项目的根目录可以得到一个result.xlsx的文件，这个文件就是经程序运行得到的最终文件了
+- Eclipse
+   ![](img/Snip20160918_12.png)
+  ![](img/Snip20160918_13.png)
+  ![](img/Snip20160918_14.png)
+  ​
+- Intellij Idea
+  ![](img/Snip20160918_7.png)
+  ![](img/Snip20160918_8.png)
+  ![](img/Snip20160918_9.png)
+  ![](img/Snip20160918_10.png)
+  ![](img/Snip20160918_11.png)
+  ​
 
 ### Principle
 
