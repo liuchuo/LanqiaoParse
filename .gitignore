@@ -10,3 +10,4 @@ lanqiaoParse.iml
 .classpath
 .project
 .settings
+bin/*
