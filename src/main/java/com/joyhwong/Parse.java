@@ -96,6 +96,9 @@ public class Parse {
 
             // 将所有的数据处理完后,将表格打印出来
             printTable(rewards);
+            xssfWorkbook.close();
+            
+            new StuInBJ();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -264,5 +267,13 @@ public class Parse {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        
+        try {
+			xssfWorkBook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
