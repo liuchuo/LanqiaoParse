@@ -5,7 +5,7 @@
 ### Get Started
 
 - Eclipse
-   ![](img/Snip20160918_12.png)
+  ![](img/Snip20160918_12.png)
   ![](img/Snip20160918_13.png)
   ![](img/Snip20160918_14.png)
   ​
