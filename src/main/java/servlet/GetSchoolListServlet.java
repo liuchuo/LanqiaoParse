@@ -27,7 +27,12 @@ public class GetSchoolListServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		SortedSet<String> schools = new TreeSet<String>();
-		schools.add("南京");
+		
+		
+		
+		
+		
+//		schools.add("南京");
 		session.setAttribute("schools", schools);
 //		response.sendRedirect("index.jsp");
 		request.getRequestDispatcher("index.jsp");
