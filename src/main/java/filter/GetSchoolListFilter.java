@@ -27,7 +27,7 @@ public class GetSchoolListFilter implements Filter{
 		HttpSession session = request.getSession();
 		
 		if (session.getAttribute("schools") == null) {
-			response.sendRedirect("getSchoolList");            //??
+			response.sendRedirect("getSchoolList");            
 			return;
 		} else {
 			filterChain.doFilter(request, response);

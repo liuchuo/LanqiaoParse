@@ -2,13 +2,14 @@ package servlet;
 
 import java.io.IOException;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.joyhwong.AllSchool;
 
 public class GetSchoolListServlet extends HttpServlet {
 	private static final long serialVersionUID = -3565728007994021470L;
@@ -26,15 +27,9 @@ public class GetSchoolListServlet extends HttpServlet {
 		// TODO
 
 		HttpSession session = request.getSession();
-		SortedSet<String> schools = new TreeSet<String>();
+		SortedSet<String> schools = new AllSchool().getAllSchools();
 		
-		
-		
-		
-		
-//		schools.add("南京");
 		session.setAttribute("schools", schools);
-//		response.sendRedirect("index.jsp");
-		request.getRequestDispatcher("index.jsp");
+		response.sendRedirect("index.jsp");
 	}
 }
