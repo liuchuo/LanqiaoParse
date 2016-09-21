@@ -24,6 +24,15 @@
 
 基于[Apache POI](http://poi.apache.org/)的Java命令行程序
 
+### TODO
+
+正在重构代码，设计成web版可定制的，具体代码可查看coding分支
+
 ### License
 
 [GPL-3.0 License](https://github.com/JoyHwong/lanqiaoParse/blob/master/LICENSE)
+
+### Contributor
+
+[LewiesCheng](https://github.com/LewiesCheng)
+
