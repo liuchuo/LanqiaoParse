@@ -8,10 +8,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@WebFilter(filterName = "schoolList-filter", urlPatterns = {"/index.jsp"})
 public class GetSchoolListFilter implements Filter{
 
 	public void destroy() {
@@ -39,5 +41,4 @@ public class GetSchoolListFilter implements Filter{
 		// TODO Auto-generated method stub
 		
 	}
-
 }

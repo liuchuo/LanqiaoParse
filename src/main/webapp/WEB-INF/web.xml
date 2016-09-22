@@ -3,23 +3,5 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Archetype Created Web Application</display-name>
-
-	<!-- <filter>
-		<filter-name>schoolList</filter-name>
-		<filter-class>filter.GetSchoolListFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>schoolList</filter-name>
-		<url-pattern>/index.jsp</url-pattern>
-	</filter-mapping> -->
-
-	<servlet>
-		<servlet-name>schoolList</servlet-name>
-		<servlet-class>servlet.GetSchoolListServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>schoolList</servlet-name>
-		<url-pattern>/getSchoolList</url-pattern>
-	</servlet-mapping>
+	<display-name>lanqiao Parse</display-name>
 </web-app>
