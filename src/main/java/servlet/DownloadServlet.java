@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.joyhwong.Parse;
-
 import beans.Reward;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -22,13 +20,14 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-@WebServlet(name = "download-servlet", urlPatterns = {"/download"})
+@WebServlet(urlPatterns = {"/download"})
 public class DownloadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 7591476022721449364L;
 
 	private String directory;
 
+	private String filename;
 	/*
 	 * (non-Javadoc)
 	 *
@@ -42,23 +41,17 @@ public class DownloadServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		directory = request.getServletContext().getRealPath("/WEB-INF");
+		filename = "result.xlsx";
 
+		request.setCharacterEncoding("utf-8");
 		String[] checkbox = request.getParameterValues("school");
-		generateFile(checkbox);
-		fileDown(response, "result.xlsx");
+		SortedMap<String, Reward> rewards = generateFile(checkbox);
+		printTable(rewards);
+//		fileDownload(response);
 		response.sendRedirect("download.jsp");
 	}
 
-	private boolean contains (String[] selected, String value) {
-		for (int i = 0; i < selected.length; i++) {
-			if (selected[i].equals(value)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void generateFile (String[] selected) {
+	private SortedMap<String, Reward> generateFile (String[] selected) {
 		// 创建一个map按照学校的名字来存储学校各个奖项的记录
 		SortedMap<String, Reward> rewards = new TreeMap<String, Reward>();
 
@@ -66,9 +59,7 @@ public class DownloadServlet extends HttpServlet {
 		File excelFile = new File(directory, "2016年软件类-江苏赛区获奖名单.xlsx");
 
 		for (String string : selected) {
-			if (contains(selected, string)) {
-				rewards.put(string, new Reward());
-			}
+			rewards.put(string, new Reward());
 		}
 
 		XSSFWorkbook xssfWorkbook = null;
@@ -87,85 +78,69 @@ public class DownloadServlet extends HttpServlet {
 				// 获取行迭代器
 				Iterator<Cell> cells = row.cellIterator();
 				cells.next(); // 跳过第一个格子(江苏)
+
 				XSSFCell cell = (XSSFCell) cells.next(); // 获取格子的内容
-
-				if (rewards.get(cell.getStringCellValue()) == null) {
-					continue;
-				}
-
 				String school = cell.getStringCellValue(); // 获取学校名
+				if (rewards.containsKey(school)) {
 
-				cells.next();cells.next(); // 跳过准考证号和姓名
+					cells.next(); cells.next(); // 跳过准考证号和姓名
 
-				String subject = cells.next().getStringCellValue(); // 获取科目值
-				String score = cells.next().getStringCellValue(); // 获取奖项
+					String subject = cells.next().getStringCellValue(); // 获取科目值
+					String score = cells.next().getStringCellValue(); // 获取奖项
 
-				// 按照各组各奖项分别放到对应的数组中
-				Reward reward = rewards.get(school);
+					// 按照各组各奖项分别放到对应的数组中
+					Reward reward = rewards.get(school);
 
-				if (subject.equals("C/C++程序设计大学 A 组省赛")) {
-					if (score.equals("一等奖")) {
-						reward.addCa(0);
-					} else if (score.equals("二等奖")) {
-						reward.addCa(1);
-					} else if (score.equals("三等奖")) {
-						reward.addCa(2);
+					if (subject.equals("C/C++程序设计大学 A 组省赛")) {
+						if (score.equals("一等奖")) {
+							reward.addCa(0);
+						} else if (score.equals("二等奖")) {
+							reward.addCa(1);
+						} else if (score.equals("三等奖")) {
+							reward.addCa(2);
+						}
+					} else if (subject.equals("C/C++程序设计大学 B 组省赛")) {
+						if (score.equals("一等奖")) {
+							reward.addCb(0);
+						} else if (score.equals("二等奖")) {
+							reward.addCb(1);
+						} else if (score.equals("三等奖")) {
+							reward.addCb(2);
+						}
+					} else if (subject.equals("JAVA 软件开发大学 A 组省赛")) {
+						if (score.equals("一等奖")) {
+							reward.addJa(0);
+						} else if (score.equals("二等奖")) {
+							reward.addJa(1);
+						} else if (score.equals("三等奖")) {
+							reward.addJa(2);
+						}
+					} else if (subject.equals("JAVA 软件开发大学 B 组省赛")) {
+						if (score.equals("一等奖")) {
+							reward.addJb(0);
+						} else if (score.equals("二等奖")) {
+							reward.addJb(1);
+						} else if (score.equals("三等奖")) {
+							reward.addJb(2);
+						}
 					}
-				} else if (subject.equals("C/C++程序设计大学 B 组省赛")) {
-					if (score.equals("一等奖")) {
-						reward.addCb(0);
-					} else if (score.equals("二等奖")) {
-						reward.addCb(1);
-					} else if (score.equals("三等奖")) {
-						reward.addCb(2);
-					}
-				} else if (subject.equals("JAVA 软件开发大学 A 组省赛")) {
-					if (score.equals("一等奖")) {
-						reward.addJa(0);
-					} else if (score.equals("二等奖")) {
-						reward.addJa(1);
-					} else if (score.equals("三等奖")) {
-						reward.addJa(2);
-					}
-				} else if (subject.equals("JAVA 软件开发大学 B 组省赛")) {
-					if (score.equals("一等奖")) {
-						reward.addJb(0);
-					} else if (score.equals("二等奖")) {
-						reward.addJb(1);
-					} else if (score.equals("三等奖")) {
-						reward.addJb(2);
-					}
+					rewards.put(school, reward);
 				}
-				rewards.put(school, reward);
 			}
-
-			// 将所有的数据处理完后,将表格打印出来
-			printTable(rewards);
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		} finally {
-
 			try {
-
-				xssfWorkbook.close();
+				if (xssfWorkbook != null) xssfWorkbook.close();
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 		}
+		return rewards;
 	}
 
-	private void printTable (SortedMap<String, Reward> rewards) {
-
-		String sheetName = "sheet1";
-		XSSFWorkbook xssfWorkBook = new XSSFWorkbook();
-		XSSFSheet xssfSheet = xssfWorkBook.createSheet(sheetName);
-		int k = 0;
-		XSSFRow row;
+	private void printHead (XSSFRow row) {
 		XSSFCell cell;
-		row = xssfSheet.createRow(k++);
 		cell = row.createCell(0);
 		cell.setCellValue("学校名称");
 		cell = row.createCell(1);
@@ -184,6 +159,41 @@ public class DownloadServlet extends HttpServlet {
 		cell.setCellValue("三等奖数量");
 		cell = row.createCell(8);
 		cell.setCellValue("占获奖总数%");
+	}
+
+	private void setValue (XSSFRow row, String school, String subject, int one, int two, int three, CellStyle style) {
+		XSSFCell cell = row.createCell(0);
+		cell.setCellValue(school);
+		cell = row.createCell(1);
+		cell.setCellValue(subject);
+		cell = row.createCell(2);
+
+		int sum = one + two + three;
+		cell.setCellValue(sum);
+		cell = row.createCell(3);
+		cell.setCellValue(one);
+		cell = row.createCell(4);
+		cell.setCellValue(one * 1.0 / sum);
+		cell.setCellStyle(style);
+		cell = row.createCell(5);
+		cell.setCellValue(two);
+		cell = row.createCell(6);
+		cell.setCellValue(two * 1.0 / sum);
+		cell.setCellStyle(style);
+		cell = row.createCell(7);
+		cell.setCellValue(three);
+		cell = row.createCell(8);
+		cell.setCellValue(three * 1.0 / sum);
+		cell.setCellStyle(style);
+	}
+
+	private void printTable (SortedMap<String, Reward> rewards) {
+		String sheetName = "sheet1";
+		XSSFWorkbook xssfWorkBook = new XSSFWorkbook();
+		XSSFSheet xssfSheet = xssfWorkBook.createSheet(sheetName);
+		int k = 0;
+		XSSFRow row = xssfSheet.createRow(k++);
+		printHead(row);
 
 		CellStyle style = xssfWorkBook.createCellStyle();
 		style.setDataFormat(xssfWorkBook.createDataFormat().getFormat("0.00%"));
@@ -194,112 +204,28 @@ public class DownloadServlet extends HttpServlet {
 
 				if (reward.getCat() != 0) {
 					row = xssfSheet.createRow(k++);
-					cell = row.createCell(0);
-					cell.setCellValue(s);
-					cell = row.createCell(1);
-					cell.setCellValue("C/C++程序设计大学 A 组省赛");
-					cell = row.createCell(2);
-					cell.setCellValue(reward.getCat());
-
 					int [] t = reward.getCa();
-					cell = row.createCell(3);
-					cell.setCellValue(t[0]);
-					cell = row.createCell(4);
-					cell.setCellValue(t[0] * 1.0 / reward.getCat());
-					cell.setCellStyle(style);
-					cell = row.createCell(5);
-					cell.setCellValue(t[1]);
-					cell = row.createCell(6);
-					cell.setCellValue(t[1] * 1.0 / reward.getCat());
-					cell.setCellStyle(style);
-					cell = row.createCell(7);
-					cell.setCellValue(t[2]);
-					cell = row.createCell(8);
-					cell.setCellValue(t[2] * 1.0 / reward.getCat());
-					cell.setCellStyle(style);
+					setValue(row, s, "C/C++程序设计大学 A 组省赛", t[0], t[1], t[2], style);
 				}
 
 				if (reward.getCbt() != 0) {
 					row = xssfSheet.createRow(k++);
-					cell = row.createCell(0);
-					cell.setCellValue(s);
-					cell = row.createCell(1);
-					cell.setCellValue("C/C++程序设计大学 B 组省赛");
-					cell = row.createCell(2);
-					cell.setCellValue(reward.getCbt());
-
 					int [] t = reward.getCb();
-					cell = row.createCell(3);
-					cell.setCellValue(t[0]);
-					cell = row.createCell(4);
-					cell.setCellValue(t[0] * 1.0 / reward.getCbt());
-					cell.setCellStyle(style);
-					cell = row.createCell(5);
-					cell.setCellValue(t[1]);
-					cell = row.createCell(6);
-					cell.setCellValue(t[1] * 1.0 / reward.getCbt());
-					cell.setCellStyle(style);
-					cell = row.createCell(7);
-					cell.setCellValue(t[2]);
-					cell = row.createCell(8);
-					cell.setCellValue(t[2] * 1.0 / reward.getCbt());
-					cell.setCellStyle(style);
+					setValue(row, s, "C/C++程序设计大学 B 组省赛", t[0], t[1], t[2], style);
 				}
 
 
 				if (reward.getJat() != 0) {
 					row = xssfSheet.createRow(k++);
-					cell = row.createCell(0);
-					cell.setCellValue(s);
-					cell = row.createCell(1);
-					cell.setCellValue("JAVA 软件开发大学 A 组省赛");
-					cell = row.createCell(2);
-					cell.setCellValue(reward.getJat());
-
 					int [] t = reward.getJa();
-					cell = row.createCell(3);
-					cell.setCellValue(t[0]);
-					cell = row.createCell(4);
-					cell.setCellValue(t[0] * 1.0 / reward.getJat());
-					cell.setCellStyle(style);
-					cell = row.createCell(5);
-					cell.setCellValue(t[1]);
-					cell = row.createCell(6);
-					cell.setCellValue(t[1] * 1.0 / reward.getJat());
-					cell.setCellStyle(style);
-					cell = row.createCell(7);
-					cell.setCellValue(t[2]);
-					cell = row.createCell(8);
-					cell.setCellValue(t[2] * 1.0/ reward.getJat());
-					cell.setCellStyle(style);
+					setValue(row, s, "JAVA 软件开发大学 A 组省赛", t[0], t[1], t[2], style);
 				}
 
 
 				if (reward.getJbt() != 0) {
 					row = xssfSheet.createRow(k++);
-					cell = row.createCell(0);
-					cell.setCellValue(s);
-					cell = row.createCell(1);
-					cell.setCellValue("JAVA 软件开发大学 B 组省赛");
-					cell = row.createCell(2);
-					cell.setCellValue(reward.getJbt());
-
 					int [] t = reward.getJb();
-					cell = row.createCell(3);
-					cell.setCellValue(t[0]);
-					cell = row.createCell(4);
-					cell.setCellValue(t[0] * 1.0 / reward.getJbt());
-					cell.setCellStyle(style);
-					cell = row.createCell(5);
-					cell.setCellValue(t[1]);
-					cell = row.createCell(6);
-					cell.setCellValue(t[1] * 1.0 / reward.getJbt());
-					cell.setCellStyle(style);
-					cell = row.createCell(7);
-					cell.setCellValue(t[2]);
-					cell = row.createCell(8);
-					cell.setCellValue(t[2] * 1.0 / reward.getJbt());
-					cell.setCellStyle(style);
+					setValue(row, s, "JAVA 软件开发大学 B 组省赛", t[0], t[1], t[2], style);
 				}
 			}
 		}
@@ -308,9 +234,7 @@ public class DownloadServlet extends HttpServlet {
 			xssfSheet.autoSizeColumn(i);
 		}
 
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        File file = new File("lanqiao" + simpleDateFormat.format(new Date()) + ".xlsx");
-		File file = new File(directory, "result.xlsx");
+		File file = new File(directory, filename);
 		FileOutputStream fileOutputStream = null;
 		try {
 			fileOutputStream = new FileOutputStream(file);
@@ -324,7 +248,7 @@ public class DownloadServlet extends HttpServlet {
 		} finally {
 			try {
 				xssfWorkBook.close();
-				fileOutputStream.close();
+				if (fileOutputStream != null) fileOutputStream.close();
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -332,12 +256,11 @@ public class DownloadServlet extends HttpServlet {
 		}
 	}
 
-	private void fileDown(HttpServletResponse response, String filename) {
-
+	private void fileDownload(HttpServletResponse response) {
 
 		File file = new File(directory, filename);
-		response.setContentType(getServletContext().getMimeType(filename));
-		response.setHeader("Content-Disposition", "attachment;filename="+filename);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
 
 		byte[] buffer = new byte[1024];
 		FileInputStream fileInputStream = null;
@@ -357,12 +280,14 @@ public class DownloadServlet extends HttpServlet {
 			System.out.println(e.toString());
 		} finally {
 			try {
-				bufferedInputStream.close();
+				if (bufferedInputStream != null) bufferedInputStream.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			try {
-				fileInputStream.close();
+				if (fileInputStream != null) fileInputStream.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
