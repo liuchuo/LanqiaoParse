@@ -10,6 +10,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebFilter(filterName = "download-filter", urlPatterns = "/download")
 public class DownloadFilter implements Filter {
@@ -27,9 +30,19 @@ public class DownloadFilter implements Filter {
 	 * 判断request里面有没有名字为school的参数 如果没有参数，则跳转到/getSchoolList 如果有参数，则执行过链
 	 */
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        // TODO Auto-generated method stub
+        
+    	HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		HttpSession session = request.getSession();
+		
+		if (session.getAttribute("school") == null) {
+			response.sendRedirect("getSchoolList");            
+			return;
+		} else {
+			filterChain.doFilter(request, response);
+		}
 
     }
 
