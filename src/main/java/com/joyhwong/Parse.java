@@ -22,15 +22,23 @@ import java.util.TreeMap;
  * follow me on github https://github.com/JoyHwong
  */
 public class Parse {
-    public static void main(String[] args) {
-        // 创建一个map按照学校的名字来存储学校各个奖项的记录
+    
+	public void remardRate(String[] schools) {
+        
+		// 创建一个map按照学校的名字来存储学校各个奖项的记录
         SortedMap<String, Reward> rewards = new TreeMap<String, Reward>();
 
         // 获取需要进行分析的源文件
         File excelFile = new File("2016年软件类-江苏赛区获奖名单.xlsx");
+        
+        for (String string : schools) {
+        	rewards.put(string, new Reward());
+		}
+        
+        XSSFWorkbook xssfWorkbook = null;
         try {
             // 创建一个工作薄表单对象
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));
+            xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));
             // 获取工作薄中得第一张工作表
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
             // 从工作表中获取工作表的行指针
@@ -44,8 +52,9 @@ public class Parse {
                 Iterator<Cell> cells = row.cellIterator();
                 cells.next(); // 跳过第一个格子(江苏)
                 XSSFCell cell = (XSSFCell) cells.next(); // 获取格子的内容
+                
                 if (rewards.get(cell.getStringCellValue()) == null) {
-                    rewards.put(cell.getStringCellValue(), new Reward());
+                    continue;
                 }
 
                 String school = cell.getStringCellValue(); // 获取学校名
@@ -96,15 +105,24 @@ public class Parse {
 
             // 将所有的数据处理完后,将表格打印出来
             printTable(rewards);
-            xssfWorkbook.close();
             
-            new StuInBJ();
+            
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            
+        	e.printStackTrace();
+        } finally {
+        	
+        	try {
+        		
+				xssfWorkbook.close();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
     }
 
-    private static void printTable (SortedMap<String, Reward> rewards) {
+    public void printTable (SortedMap<String, Reward> rewards) {
 
         String sheetName = "sheet1";
         XSSFWorkbook xssfWorkBook = new XSSFWorkbook();
@@ -255,25 +273,30 @@ public class Parse {
             xssfSheet.autoSizeColumn(i);
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        File file = new File("lanqiao" + simpleDateFormat.format(new Date()) + ".xlsx");
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        File file = new File("lanqiao" + simpleDateFormat.format(new Date()) + ".xlsx");
+        File file = new File("result.xlsx");
+        FileOutputStream fileOutputStream = null;
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream = new FileOutputStream(file);
             xssfWorkBook.write(fileOutputStream);
             fileOutputStream.flush();
-            fileOutputStream.close();
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
-        
-        try {
-			xssfWorkBook.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        } finally {
+        	try {
+    			xssfWorkBook.close();
+    			fileOutputStream.close();
+    		} catch (IOException e) {
+    			
+    			e.printStackTrace();
+    		}
 		}
+        
+        
+        
     }
 }
