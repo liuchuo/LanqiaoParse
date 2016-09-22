@@ -18,7 +18,7 @@ public class AllSchool {
 
 	private SortedSet<String> schools = new TreeSet<String>();
 	
-	File excelFile = new File("2016年软件类-江苏赛区获奖名单.xlsx");
+	private  File excelFile = new File("2016年软件类-江苏赛区获奖名单.xlsx");
 	
 	public SortedSet<String> getAllSchools() {
 		
@@ -41,6 +41,7 @@ public class AllSchool {
                 
             }
             xssfWorkbook.close();
+            
 		}catch (IOException e) {
             e.printStackTrace();
         }
