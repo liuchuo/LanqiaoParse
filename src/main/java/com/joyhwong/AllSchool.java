@@ -25,6 +25,40 @@ public class AllSchool {
 
 	public SortedSet<String> getAllSchools() {
 
-			return schools;
+		 XSSFWorkbook xssfWorkbook = null;
+		
+		try {
+            
+            xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));           
+            XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);           
+            
+            Iterator<Row> rows = xssfSheet.rowIterator();      
+            rows.next();rows.next();rows.next();
+            
+            while (rows.hasNext()) {
+                
+                XSSFRow row = (XSSFRow) rows.next();
+                XSSFCell cell = row.getCell(1);
+                
+                if (!schools.contains(cell.getStringCellValue())) {
+                	schools.add(cell.getStringCellValue());
+                }
+                
+            }
+            
+            
+		} catch (IOException e) {
+            
+			e.printStackTrace();
+        } finally {
+        	
+        	try {
+        		xssfWorkbook.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return schools;
 	}
 }
