@@ -22,9 +22,11 @@ public class AllSchool {
 	
 	public SortedSet<String> getAllSchools() {
 		
+		 XSSFWorkbook xssfWorkbook = null;
+		
 		try {
             
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));           
+            xssfWorkbook = new XSSFWorkbook(new FileInputStream(excelFile));           
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);           
             
             Iterator<Row> rows = xssfSheet.rowIterator();      
@@ -40,11 +42,19 @@ public class AllSchool {
                 }
                 
             }
-            xssfWorkbook.close();
             
-		}catch (IOException e) {
-            e.printStackTrace();
-        }
+            
+		} catch (IOException e) {
+            
+			e.printStackTrace();
+        } finally {
+        	
+        	try {
+        		xssfWorkbook.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
 		
 		return schools;
 	}
