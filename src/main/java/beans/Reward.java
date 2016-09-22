@@ -45,7 +45,6 @@ public class Reward {
         jbt++;
     }
 
-
     public int getCat() {
         return cat;
     }

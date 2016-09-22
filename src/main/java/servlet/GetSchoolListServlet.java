@@ -51,7 +51,8 @@ public class GetSchoolListServlet extends HttpServlet {
                 XSSFRow row = (XSSFRow) rows.next();
                 XSSFCell cell = row.getCell(1);
 
-                if (!schools.contains(cell.getStringCellValue())) {
+                String value = cell.getStringCellValue();
+                if (!schools.contains(value) && !value.equals("")) {
                     schools.add(cell.getStringCellValue());
                 }
 
