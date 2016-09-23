@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(filterName = "schoolList-filter", urlPatterns = {"/index.jsp"})
+@WebFilter(urlPatterns = {"/index.jsp"})
 public class GetSchoolListFilter implements Filter{
 
 	public void destroy() {

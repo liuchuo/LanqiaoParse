@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import beans.BinJiang;
 import beans.Reward;
@@ -23,8 +24,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-@WebServlet(urlPatterns = {"/download"})
-public class DownloadServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/generate"})
+public class GenerateFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 7591476022721449364L;
 
@@ -46,13 +47,13 @@ public class DownloadServlet extends HttpServlet {
 		directory = request.getServletContext().getRealPath("/WEB-INF");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		filename = "lanqiaoParse" + simpleDateFormat.format(new Date()) + ".xlsx";
-
+		HttpSession session = request.getSession();
+		session.setAttribute("filename", filename);
 		String[] checkbox = request.getParameterValues("school");
 		SortedMap<String, Reward> rewards = generateRewards(checkbox);
 		printRewards(rewards);
 		SortedMap<String, BinJiang> students = generateStudent();
 		printStudents(students);
-		fileDownload(response);
 		response.sendRedirect("download.jsp");
 	}
 
@@ -387,39 +388,4 @@ public class DownloadServlet extends HttpServlet {
 
 	}
 
-	private void fileDownload(HttpServletResponse response) throws IOException {
-
-		File file = new File(directory, filename);
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
-
-		byte[] buffer = new byte[1024];
-		FileInputStream fileInputStream = null;
-		BufferedInputStream bufferedInputStream = null;
-		try {
-			fileInputStream = new FileInputStream(file);
-			bufferedInputStream = new BufferedInputStream(fileInputStream);
-			OutputStream outputStream = response.getOutputStream();
-			int i = bufferedInputStream.read(buffer);
-			while (i != -1) {
-				outputStream.write(buffer, 0, i);
-				i = bufferedInputStream.read(buffer);
-			}
-			outputStream.flush();
-			outputStream.close();
-		} catch (IOException e) {
-			System.out.println(e.toString());
-		} finally {
-			try {
-				if (bufferedInputStream != null) bufferedInputStream.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				if (fileInputStream != null) fileInputStream.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }

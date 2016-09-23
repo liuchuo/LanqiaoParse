@@ -20,7 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-@WebServlet(name = "schoolList-servlet", urlPatterns = { "/getSchoolList" })
+@WebServlet(urlPatterns = { "/getSchoolList" })
 public class GetSchoolListServlet extends HttpServlet {
     private static final long serialVersionUID = -3565728007994021470L;
 

@@ -12,8 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter(urlPatterns = "/download")
-public class DownloadFilter implements Filter {
+@WebFilter(urlPatterns = "/generate")
+public class GenerateFileServlet implements Filter {
 
     public void destroy() {
     }
@@ -24,7 +24,7 @@ public class DownloadFilter implements Filter {
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
 	 * javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 *
-	 * 判断request里面有没有名字为school的参数 如果没有参数，则跳转到/getSchoolList 如果有参数，则执行过链
+	 * 判断request里面有没有名字为school的参数 如果没有参数，则跳转到getSchoolList 如果有参数，则执行过链
 	 */
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -34,11 +34,10 @@ public class DownloadFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		
 		if (request.getParameter("school") == null) {
-			response.sendRedirect("getSchoolList");
+			request.getRequestDispatcher("getSchoolList").forward(request, response);
 		} else {
 			filterChain.doFilter(request, response);
 		}
-
     }
 
     public void init(FilterConfig arg0) throws ServletException {
