@@ -24,9 +24,13 @@
 
 基于[Apache POI](http://poi.apache.org/)的Java命令行程序
 
-### TODO
 
-正在重构代码，设计成web版可定制的，具体代码可查看coding分支
+### Note
+
+- Web资源路径和Java资源路径
+  在Java的命令行程序里面，文件的路径是直接在根路径下可以找到的，比如在lanqiaoParse路径下的文件file，那么File file = new File(file);就是直接在根目录下可以找到的；在web程序里面，文件一般放在WEB-INF下，那么就要File file = new File(request.getServletContext().getRealPath("/WEB-INF"), file);才能找到了
+- 在用Servlet下载后，重定向到一个页面
+  此问题待解决。。。。
 
 ### License
 

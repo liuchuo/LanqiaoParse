@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter(filterName = "download-filter", urlPatterns = "/download")
+@WebFilter(urlPatterns = "/download")
 public class DownloadFilter implements Filter {
 
     public void destroy() {

@@ -9,12 +9,12 @@
 <body>
 	<h1>lanqiao Parse for BinJiang</h1>
 	<h4>Select schools which you want to parse:</h4>
-	<form action="download" method="get">
+	<form action="download.jsp" method="get">
 		<c:forEach var="school" items="${sessionScope.schools}">
 			<label><input type="checkbox" title="school" name="school"
 				value="<c:out value='${school}' />" /> <c:out value="${school}" /></label> <br />
 		</c:forEach>
-		<input type="submit" value="Submit" title="submit" />
+		<input type="submit" value="点击生成文件" title="submit" />
 	</form>
 </body>
 </html>

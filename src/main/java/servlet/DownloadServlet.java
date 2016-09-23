@@ -37,7 +37,7 @@ public class DownloadServlet extends HttpServlet {
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.
 	 * HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 * 从request里面提取出学校的名字参数是school有多个值， 在源excel文件中找到这些学校进行分析 然后调用下载文件方法fileDownload(response,
-	 * filename)下载文件 最后跳转到download.jsp页面
+	 * filename)下载文件
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -53,6 +53,7 @@ public class DownloadServlet extends HttpServlet {
 		SortedMap<String, BinJiang> students = generateStudent();
 		printStudents(students);
 		fileDownload(response);
+		response.sendRedirect("download.jsp");
 	}
 
 	private SortedMap<String, BinJiang> generateStudent () {
@@ -420,6 +421,5 @@ public class DownloadServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		response.sendRedirect("download.jsp");
 	}
 }
