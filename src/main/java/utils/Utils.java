@@ -1,4 +1,4 @@
-package controller;
+package utils;
 
 public final class Utils {
     private Utils() {}
@@ -8,5 +8,4 @@ public final class Utils {
     public static String getFileName() {
         return filename;
     }
-
 }
