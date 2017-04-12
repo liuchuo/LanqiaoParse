@@ -29,9 +29,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-
-    @Bean
-    public IndexControllerLog indexControllerLog() {
-        return new IndexControllerLog();
-    }
 }

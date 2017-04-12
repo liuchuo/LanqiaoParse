@@ -40,8 +40,7 @@ public class IndexController {
             if (rows.hasNext()) rows.next(); // skip the table head.
 
             while (rows.hasNext()) {
-                XSSFRow row = (XSSFRow) rows.next();
-
+                Row row = rows.next();
                 String name = row.getCell(1).getStringCellValue();
                 if (!schoolSet.contains(name)) {
                     schoolSet.add(name);
