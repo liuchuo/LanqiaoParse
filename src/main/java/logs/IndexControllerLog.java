@@ -21,36 +21,20 @@ import java.util.TreeSet;
 
 
 @Aspect
-@Component
 public class IndexControllerLog {
     Logger logger = LoggerFactory.getLogger(IndexController.class.getSimpleName());
 
     @Pointcut("execution(* controller.IndexController.doGet(..))")
     public void doGetMethod() {}
 
-    @Around("doGetMethod() && args(request)")
-    public void execDoGet(ProceedingJoinPoint jp, HttpServletRequest request) {
+    @Around("doGetMethod()")
+    public void execDoGet(ProceedingJoinPoint jp) {
         try {
             logger.info("execute do get method");
-
             jp.proceed();
             logger.info("executed to get method");
         } catch (Throwable e) {
             logger.error("Error to execute do get method");
-        }
-    }
-
-    @Pointcut("execution(* controller.IndexController.getSchoolSet(..))")
-    public void getSchoolSetMethod() {}
-
-    @Around("getSchoolSetMethod()")
-    public void execGetSchoolSet(ProceedingJoinPoint jp) {
-        try {
-            logger.info("execute to get school set method");
-            jp.proceed();
-            logger.info("executed to get school set method");
-        } catch (Throwable throwable) {
-            logger.error("failed to executed get school set method");
         }
     }
 }

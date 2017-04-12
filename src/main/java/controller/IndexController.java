@@ -24,13 +24,12 @@ public class IndexController {
         File file = new File(request.getServletContext().getRealPath("/WEB-INF/classes"), Utils.getFileName());
 
         Set<String> schoolSet = getSchoolSet(file);
-        schoolSet.add("HangZhou");
-        schoolSet.add("NanJing");
         request.setAttribute("school", schoolSet);
         return "index";
     }
 
-    public Set<String> getSchoolSet(File file) {
+
+    private Set<String> getSchoolSet(File file) {
         XSSFWorkbook book = null;
         try {
             Set<String> schoolSet = new TreeSet<String>();
